@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Purrfect Pix Frontend (work on progress)
+
+Welcome to the Purrfect Pix Frontend repository! This project provides a frontend interface for managing and displaying cat cards, containing info fetched from [TheCatAPI](https://thecatapi.com/). The backend API, which serves as the data source for this frontend, can be found [here](https://github.com/NGFuture/2024_purrfect_pix_be).
+
+## Project Overview
+
+This frontend allows you to download, save, modify, and filter cats' information. It communicates with the backend to fetch and manipulate cat data.
 
 ## Getting Started
 
-First, run the development server:
+To run this frontend project, ensure that the backend server is running locally or on a remote server accessible to your frontend. Follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the Repository**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    ```bash
+    git clone https://github.com/NGFuture/2024_purrfect_pix_fe.git
+    cd 2024_purrfect_pix_fe
+    ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2. **Install Dependencies**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    ```bash
+    npm install
+    ```
 
-## Learn More
+3. **Set Up Environment Variables**
 
-To learn more about Next.js, take a look at the following resources:
+    Create a `.env.local` file in the root of your frontend directory. Add the following line to connect to your backend API:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```
+    NEXT_PUBLIC_API_URL="http://localhost:8000"
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    Replace `"http://localhost:8000"` with the actual URL of your backend API if it's hosted elsewhere.
 
-## Deploy on Vercel
+4. **Start the Development Server**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    npm run dev
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    This command starts the development server. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+
+## Planned Improvements
+
+- **UI/UX Update:** Enhance the user interface and experience.
+- **Cat Cards Update:** Add options to update names and descriptions of cat cards.

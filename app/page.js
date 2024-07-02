@@ -3,7 +3,7 @@ import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import React, { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const limit = 12;
 const unknownBreed = { label: "Unknown", value: "unknown" };
 
@@ -39,9 +39,18 @@ const Home = () => {
     setSelectedBreeds(value);
   }
 
+  const resetDatabase = () => {
+    fetch(`${API_URL}/api/cats/reset/`, {
+      method: "POST",
+    }).then(() => {
+      setPage(1);
+      setFavoritesFilter(false);
+      setSelectedBreeds([]);
+    });
+  }
 
   useEffect(() => {
-    let url = `${API_URL}/api/cats/list-cats/?limit=${limit}&skip=${
+    let url = `${API_URL}/api/cats/?limit=${limit}&skip=${
       (page - 1) * limit
     }`;
     if (favoritesFilter) {
@@ -106,7 +115,7 @@ const Home = () => {
             </div>
             <div className="flex-1"></div>
             <div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetDatabase}>
                 Reset Database
               </button>
             </div>
@@ -117,6 +126,7 @@ const Home = () => {
                 defaultCurrent={1}
                 total={total}
                 pageSize={limit}
+                showSizeChanger={false}
                 current = {page}
                 onChange={(page) => {
                   setPage(page);
@@ -166,6 +176,7 @@ const Home = () => {
                 defaultCurrent={1}
                 total={total}
                 pageSize={limit}
+                showSizeChanger={false}
                 current = {page}
                 onChange={(page) => {
                   setPage(page);
