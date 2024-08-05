@@ -29,3 +29,11 @@
     
 }
 
+.editable-show:hover .hover-show {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.editable-show .hover-show {
+    display: none;
+}

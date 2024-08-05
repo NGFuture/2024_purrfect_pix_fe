@@ -1,9 +1,10 @@
 "use client";
+import CatCard from "@/components/CatCard";
+import { API_URL } from "@/components/config";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Pagination, Select } from "antd";
 import React, { useState, useEffect } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const limit = 12;
 const unknownBreed = { label: "Unknown", value: "unknown" };
 
@@ -19,25 +20,14 @@ const Home = () => {
     setFavoritesFilter(!favoritesFilter);
   };
 
-  const toggleFavorite = (id) => { 
-    let url = `${API_URL}/api/cats/${id}/favorite/`;
-    fetch(url, {
-      method: "PUT",
-    }).then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      setCats(
-        cats.map((cat) =>
-          cat.id === id ? { ...cat, favorite: data.favorite } : cat
-        )
-      );
-    });
-  }
+  const updateCatLocalState = (data) => {
+    const { id } = data;
+    setCats(cats.map((cat) => (cat.id === id ? { ...cat, ...data } : cat)));
+  };
 
   const onChange = (value, options) => {
     setSelectedBreeds(value);
-  }
+  };
 
   const resetDatabase = () => {
     fetch(`${API_URL}/api/cats/reset/`, {
@@ -47,12 +37,10 @@ const Home = () => {
       setFavoritesFilter(false);
       setSelectedBreeds([]);
     });
-  }
+  };
 
   useEffect(() => {
-    let url = `${API_URL}/api/cats/?limit=${limit}&skip=${
-      (page - 1) * limit
-    }`;
+    let url = `${API_URL}/api/cats/?limit=${limit}&skip=${(page - 1) * limit}`;
     if (favoritesFilter) {
       url += "&favorite=true";
     }
@@ -69,19 +57,21 @@ const Home = () => {
       .then((data) => {
         setCats(data.items);
         setTotal(data.count);
-        setBreedOptions([unknownBreed, ...data.breeds.map((breed) => ({
-          label: breed.name,
-          value: breed.id,
-        }))]);
+        setBreedOptions([
+          unknownBreed,
+          ...data.breeds.map((breed) => ({
+            label: breed.name,
+            value: breed.id,
+          })),
+        ]);
       });
   }, [page, favoritesFilter, selectedBreeds]);
 
   useEffect(() => {
     setPage(1);
-    }, [favoritesFilter, selectedBreeds]);
+  }, [favoritesFilter, selectedBreeds]);
 
   return (
-    <>
       <div className="flex f-full overflow-hidden max-h-screen flex-col">
         <div className="bg-gray-800 text-white flex justify-center header-part">
           <h1 className="text-3xl font-bold">Purrfect Pix</h1>
@@ -93,8 +83,12 @@ const Home = () => {
                 className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={toggleFavoriteFilter}
               >
-                {favoritesFilter ? <HeartFilled className="text-red-500"/> : <HeartOutlined />} 
-              <span className="">Favorites only</span>
+                {favoritesFilter ? (
+                  <HeartFilled className="text-red-500" />
+                ) : (
+                  <HeartOutlined />
+                )}
+                <span className="">Favorites only</span>
               </button>
             </div>
             <div>
@@ -115,7 +109,10 @@ const Home = () => {
             </div>
             <div className="flex-1"></div>
             <div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetDatabase}>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={resetDatabase}
+              >
                 Reset Database
               </button>
             </div>
@@ -127,7 +124,7 @@ const Home = () => {
                 total={total}
                 pageSize={limit}
                 showSizeChanger={false}
-                current = {page}
+                current={page}
                 onChange={(page) => {
                   setPage(page);
                 }}
@@ -136,31 +133,13 @@ const Home = () => {
 
             <div className="overflow-y-auto p-4 flex-1">
               {!!cats.length && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {cats.map((cat) => (
                     <div
-                      className="max-w-sm rounded overflow-hidden shadow-lg"
+                      className="w-full rounded overflow-hidden shadow-lg"
                       key={cat.id}
                     >
-                      <img className="w-full" src={cat.url} alt="Cat" />
-                      <div className="px-6 py-4">
-                        {cat.favorite ? (
-                          <HeartFilled
-                            className="text-red-500"
-                            onClick={() => {
-                              toggleFavorite(cat.id);
-                            }}
-                          />
-                        ) : (
-                          <HeartOutlined
-                            onClick={() => {
-                              toggleFavorite(cat.id);
-                            }}
-                          />
-                        )}
-                        <div className="font-bold text-xl mb-2">Cat</div>
-                        <p className="text-gray-700 text-base">{cat.url}</p>
-                      </div>
+                     <CatCard cat={cat} updateCatLocalState={updateCatLocalState} />
                     </div>
                   ))}
                 </div>
@@ -177,7 +156,7 @@ const Home = () => {
                 total={total}
                 pageSize={limit}
                 showSizeChanger={false}
-                current = {page}
+                current={page}
                 onChange={(page) => {
                   setPage(page);
                 }}
@@ -186,7 +165,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 
