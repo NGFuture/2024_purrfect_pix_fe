@@ -56,7 +56,7 @@ const Home = () => {
     if (selectedBreeds.length) {
       url += `&breeds=${selectedBreeds.join(",")}`;
     }
-    setLoading(true)
+    setLoading(true);
     fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -75,11 +75,11 @@ const Home = () => {
           })),
         ]);
       })
-      .catch((error) => { 
-          console.log(error)
+      .catch((error) => {
+        console.log(error);
       })
       .finally(() => {
-        setLoading(false)
+        setLoading(false);
       });
   }, [page, favoritesFilter, selectedBreeds]);
 
@@ -92,16 +92,6 @@ const Home = () => {
       <div className="text-white flex header-part p-2 gap-2 justify-end" />
       <div className="flex flex-1 overflow-hidden main-part">
         <div className="main-left-part bg-gray-700">
-          {/* <div className="flex justify-center">
-            <Image
-              src="/logo1.jpg"
-              alt="logo"
-              layout="responsive"
-              width={50}
-              height={50}
-              className="w-auto"
-            />
-          </div> */}
           <div className="pt-2 pb-10 text-center">
             <h1 className="text-3xl font-bold logo-text">Purrfect Pix</h1>
           </div>
@@ -146,12 +136,9 @@ const Home = () => {
                 setIsModalOpen(true);
               }}
             >
-              <Image
+              <img
                 src="/button-three-cats.jpg"
                 alt="Button Cats"
-                layout="responsive"
-                width={500}
-                height={500}
                 className="w-full"
               />
             </button>
@@ -163,7 +150,10 @@ const Home = () => {
           </div>
         ) : cats.length === 0 ? (
           <div className="flex flex-1 justify-center pt-10 px-2">
-            <p>Uh-oh, no cats here! 🐾 Tap the button with three cats to fetch more fluffy friends!</p>
+            <p>
+              Uh-oh, no cats here! 🐾 Tap the button with three cats to fetch
+              more fluffy friends!
+            </p>
           </div>
         ) : (
           <div className="flex flex-col flex-1">

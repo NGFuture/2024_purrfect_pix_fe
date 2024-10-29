@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const EditableText = ({ value, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -29,22 +30,21 @@ const EditableText = ({ value, onEdit }) => {
         onKeyDown={handleKeyDown}
         autoFocus // Add autoFocus to focus on the input
       />
-      {/* <div className="">
-    <button onClick={handleUpdate}>V</button>
-    <button onClick={() => setIsEditing(false)}>X</button>
-    </div> */}
       <div className="button-container">
-        <button onClick={handleUpdate} className="rounded-button v-button">
-          V
+        <button
+          onClick={handleUpdate}
+          className="rounded-button v-button px-2 "
+        >
+          <FaCheck />
         </button>
         <button
           onClick={() => {
-            setIsEditing(false)
-            setInputValue(value)
+            setIsEditing(false);
+            setInputValue(value);
           }}
-          className="rounded-button x-button"
+          className="rounded-button x-button px-2"
         >
-          X
+          <FaTimes />
         </button>
       </div>
     </>
