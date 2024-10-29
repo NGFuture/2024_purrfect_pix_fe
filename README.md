@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./banner.jpg" alt="Banner" />
+</p>
+
 # Purrfect Pix Frontend (work on progress)
 
 Welcome to the Purrfect Pix Frontend repository! This project provides a frontend interface for managing and displaying cat cards, containing info fetched from [TheCatAPI](https://thecatapi.com/). The backend API, which serves as the data source for this frontend, can be found [here](https://github.com/NGFuture/2024_purrfect_pix_be).

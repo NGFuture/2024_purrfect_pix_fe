@@ -2,38 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
+/* index.scss or _fonts.scss */
+@import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap');
+// import "https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap"
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Chewy&display=swap");
 :root {
-    --header-height: 80px;
+  --header-height: 120px;
+}
+
+body {
+  font-family: "Chewy", cursive;
+}
+
+
+
+html {
+  font-size: 30px;
+}
+
+@media (max-width: 1920px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+.logo-text {
+  font-family: "Bubblegum Sans", cursive;
+  color: #fff;
+}
+
+.pagination-custom.ant-pagination .ant-pagination-item {
+    font-family: "Chewy", cursive;
 }
 
 .main-part {
-    min-height: calc(100vh - var(--header-height));
-    max-height: calc(100vh - var(--header-height));
+  min-height: calc(100vh - var(--header-height));
+  max-height: calc(100vh - var(--header-height));
 }
 
 .main-left-part {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    width: 200px;
-    padding: 5px;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 200px;
+  padding: 5px;
+  gap: 5px;
 }
 
 .header-part {
     height: var(--header-height);
-}
+    background: url(/banner.jpg) repeat-x;
+    background-size: auto 100%;
+    background-repeat: repeat-x; /* Repeat the image horizontally */
+    background-position: center; /* Optional: Center the image vertically */
+  }
 
+  /* changing styles of antd select element */
 .select-font .ant-select-dropdown .ant-select-item {
-    font-size: 0.75rem;
-    
+  font-size: 0.75rem;
 }
 
 .editable-show:hover .hover-show {
-    cursor: pointer;
-    display: inline-block;
+  cursor: pointer;
+  display: inline-block;
 }
 
 .editable-show .hover-show {
-    display: none;
+  display: none;
+}
+
+.select-font .ant-select-selector {
+  border-color: #fd8638 !important; /* Orange border */
+}
+
+.select-font .ant-select-selection-item {
+  color: #000; /* Text color */
+}
+
+.select-font .ant-select-item-option-selected {
+  background-color: #fcfaed !important; /* Background color of selected item */
+}
+
+.select-font .ant-select-item-option-active {
+  background-color: #fd8638 !important; /* Orange hover color for the dropdown options */
+}
+
+.select-font .ant-select-item-option-selected .ant-select-item-option-content {
+  background-color: #fad090 !important; /* Orange background for selected check */
+}
+
+.select-font .ant-select-item-option-selected .anticon-check {
+  color: #fd8638 !important; /* Orange checkmark */
+}
+
+/* styles for X and V icons */
+
+.button-container {
+  display: flex;
+  gap: 2px; /* Space between buttons */
+}
+
+.rounded-button {
+  border: none;
+  padding: 3px;
+  font-size: 14px;
+  border-radius: 5%; /* Full rounding */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.v-button {
+  background-color: #F4A261; /* Soft Warm Orange */
+  color: white;
+}
+
+.x-button {
+  background-color: #dadbc8; /* Muted Grayish */
+  color: white;
+}
+
+.rounded-button:hover {
+  background-color: #E29578; /* Warm Taupe on hover */
 }

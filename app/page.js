@@ -1,8 +1,10 @@
 "use client";
 import CatCard from "@/components/CatCard";
 import { API_URL } from "@/components/config";
+import ConfirmModal from "@/components/ConfirmModal";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
-import { Pagination, Select } from "antd";
+import { Pagination, Select, Spin } from "antd";
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 const limit = 12;
@@ -15,6 +17,8 @@ const Home = () => {
   const [favoritesFilter, setFavoritesFilter] = useState(false);
   const [breedOptions, setBreedOptions] = useState([]);
   const [selectedBreeds, setSelectedBreeds] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toggleFavoriteFilter = () => {
     setFavoritesFilter(!favoritesFilter);
@@ -30,13 +34,18 @@ const Home = () => {
   };
 
   const resetDatabase = () => {
+    setLoading(true);
     fetch(`${API_URL}/api/cats/reset/`, {
       method: "POST",
-    }).then(() => {
-      setPage(1);
-      setFavoritesFilter(false);
-      setSelectedBreeds([]);
-    });
+    })
+      .then(() => {
+        setPage(1);
+        setFavoritesFilter(false);
+        setSelectedBreeds([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -47,6 +56,7 @@ const Home = () => {
     if (selectedBreeds.length) {
       url += `&breeds=${selectedBreeds.join(",")}`;
     }
+    setLoading(true)
     fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -64,6 +74,12 @@ const Home = () => {
             value: breed.id,
           })),
         ]);
+      })
+      .catch((error) => { 
+          console.log(error)
+      })
+      .finally(() => {
+        setLoading(false)
       });
   }, [page, favoritesFilter, selectedBreeds]);
 
@@ -72,54 +88,88 @@ const Home = () => {
   }, [favoritesFilter, selectedBreeds]);
 
   return (
-      <div className="flex f-full overflow-hidden max-h-screen flex-col">
-        <div className="bg-gray-800 text-white flex justify-center header-part">
-          <h1 className="text-3xl font-bold">Purrfect Pix</h1>
-        </div>
-        <div className="flex flex-1 overflow-hidden main-part">
-          <div className="main-left-part ">
-            <div>
-              <button
-                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={toggleFavoriteFilter}
-              >
-                {favoritesFilter ? (
-                  <HeartFilled className="text-red-500" />
-                ) : (
-                  <HeartOutlined />
-                )}
-                <span className="">Favorites only</span>
-              </button>
-            </div>
-            <div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Breeds
-              </button>
-              <Select
-                className="select-font"
-                popupClassName="select-font"
-                mode="tags"
-                style={{
-                  width: "100%",
-                }}
-                placeholder="Choose breeds"
-                onChange={onChange}
-                options={breedOptions}
-              />
-            </div>
-            <div className="flex-1"></div>
-            <div>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={resetDatabase}
-              >
-                Reset Database
-              </button>
-            </div>
+    <div className="flex f-full overflow-hidden max-h-screen flex-col">
+      <div className="text-white flex header-part p-2 gap-2 justify-end" />
+      <div className="flex flex-1 overflow-hidden main-part">
+        <div className="main-left-part bg-gray-700">
+          {/* <div className="flex justify-center">
+            <Image
+              src="/logo1.jpg"
+              alt="logo"
+              layout="responsive"
+              width={50}
+              height={50}
+              className="w-auto"
+            />
+          </div> */}
+          <div className="pt-2 pb-10 text-center">
+            <h1 className="text-3xl font-bold logo-text">Purrfect Pix</h1>
           </div>
+          <div className="text-center">
+            <button
+              className="inline-flex items-center gap-2 bg-[#fcfaed] hover:bg-[#fd8638] text-black font-bold py-2 px-4 rounded"
+              onClick={toggleFavoriteFilter}
+            >
+              {favoritesFilter ? (
+                <HeartFilled className="text-red-500" />
+              ) : (
+                <HeartOutlined />
+              )}
+              <span>Favorites only</span>
+            </button>
+          </div>
+          <div>
+            <h2 className="text-white font-bold pt-2 text-center">
+              Select Breeds
+            </h2>
+            <Select
+              className="select-font"
+              popupClassName="select-font"
+              mode="tags"
+              style={{
+                width: "100%",
+                backgroundColor: "#fcfaed",
+                borderColor: "#fd8638", // Set the border color to orange
+                color: "#000",
+              }}
+              placeholder="Choose breeds"
+              onChange={onChange}
+              options={breedOptions}
+            />
+          </div>
+
+          <div className="flex-1"></div>
+          <div>
+            <button
+              className="flex flex-col items-center bg-[#fcfaed] hover:bg-[#fd8638] text-black font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <Image
+                src="/button-three-cats.jpg"
+                alt="Button Cats"
+                layout="responsive"
+                width={500}
+                height={500}
+                className="w-full"
+              />
+            </button>
+          </div>
+        </div>
+        {loading ? (
+          <div className="flex justify-center items-center flex-1">
+            <Spin tip="Loading" size="large"></Spin>
+          </div>
+        ) : cats.length === 0 ? (
+          <div className="flex flex-1 justify-center pt-10 px-2">
+            <p>Uh-oh, no cats here! 🐾 Tap the button with three cats to fetch more fluffy friends!</p>
+          </div>
+        ) : (
           <div className="flex flex-col flex-1">
             <div className="p-2 flex justify-center">
               <Pagination
+                className="pagination-custom"
                 defaultCurrent={1}
                 total={total}
                 pageSize={limit}
@@ -139,19 +189,18 @@ const Home = () => {
                       className="w-full rounded overflow-hidden shadow-lg"
                       key={cat.id}
                     >
-                     <CatCard cat={cat} updateCatLocalState={updateCatLocalState} />
+                      <CatCard
+                        cat={cat}
+                        updateCatLocalState={updateCatLocalState}
+                      />
                     </div>
                   ))}
-                </div>
-              )}
-              {!cats.length && (
-                <div className="flex justify-center">
-                  <p>No cats found</p>
                 </div>
               )}
             </div>
             <div className="p-2 flex justify-center">
               <Pagination
+                className="pagination-custom"
                 defaultCurrent={1}
                 total={total}
                 pageSize={limit}
@@ -163,8 +212,14 @@ const Home = () => {
               />
             </div>
           </div>
-        </div>
+        )}
       </div>
+      <ConfirmModal
+        handleConfirm={resetDatabase}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+    </div>
   );
 };
 
